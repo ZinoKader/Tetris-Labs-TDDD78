@@ -4,12 +4,15 @@ public class Exercise8 {
 
     public static void main(String[] args) {
 	while(true) {
-	    //
+	    // Does not evaluate all statements, if the first one is
+	    // false, then it won't ask "really?"
+	    // This is consequentially more proper for our use case
 	    if (askUser("Quit?") && askUser("Really?")) {
 	        System.out.println("Quitting...");
 	        return;
 	    }
-	    // Evaluates both statements
+	    // Evaluates both statements, if you input something else
+	    // other than "Quit?", it'll still ask you "Really?"
 	    if (askUser("Quit?") & askUser("Really?")) {
 		System.out.println("Quitting...");
 		return;
