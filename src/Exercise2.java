@@ -1,7 +1,10 @@
-public class Excercise2 {
+import javax.swing.*;
+
+public class Exercise2
+{
     public static void main(String[] args) {
-	int min = 10;
-	int max = 20;
+	int min = Integer.parseInt(JOptionPane.showInputDialog("Enter a min value: "));
+	int max = Integer.parseInt(JOptionPane.showInputDialog("Enter a max value: "));
 	System.out.println(sumFor(min, max));
 	System.out.println(sumWhile(min, max));
     }
