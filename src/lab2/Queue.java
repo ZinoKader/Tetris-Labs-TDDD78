@@ -5,6 +5,9 @@ import java.util.List;
 
 public class Queue {
 
+    public Queue() {
+    }
+
     private List<Person> elements = new ArrayList<>();
 
     public int size() {

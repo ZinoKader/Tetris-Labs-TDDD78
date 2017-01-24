@@ -3,8 +3,10 @@ package lab2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Stack
-{
+public class Stack {
+
+    public Stack() {
+    }
 
     private List<Person> elements = new ArrayList<>();
 

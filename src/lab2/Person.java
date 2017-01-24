@@ -21,7 +21,9 @@ public class Person
 	return Period.between(this.birthDay, LocalDate.now()).getYears();
     }
 
-
+    public String getName() {
+        return name;
+    }
 
     public static void main(String[] args) {
 	Person zino = new Person("Zino", LocalDate.of(1997, 12, 25));
