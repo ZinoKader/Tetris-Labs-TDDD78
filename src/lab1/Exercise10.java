@@ -1,3 +1,5 @@
+package lab1;
+
 public class Exercise10 {
     public static void main(String[] args) {
 	int tal = 16777217;
