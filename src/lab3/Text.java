@@ -1,6 +1,6 @@
 package lab3;
 
-import javafx.scene.paint.Color;
+import java.awt.*;
 
 public class Text extends AbstractShape {
 
@@ -17,8 +17,10 @@ public class Text extends AbstractShape {
 	return "Text{" + "x=" + x + ", y=" + y + ", size=" + size + ", color=" + color + ", text='" + text + '\'' + '}';
     }
 
-    @Override public void draw() {
-	System.out.println("Ritar: " + this);
+    @Override public void draw(final Graphics g) {
+	g.setColor(getColor());
+ 	g.setFont(new Font("serif", Font.PLAIN, size));
+ 	g.drawString(text, getX(), getY());
     }
 
     @Override public int getRadius() {

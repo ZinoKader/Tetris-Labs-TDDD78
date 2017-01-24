@@ -1,16 +1,15 @@
 package lab3;
 
+import javax.swing.*;
 import java.awt.*;
-
 import java.util.ArrayList;
-import java.util.List;
 
-public class TestShape
-{
-
+public class DiagramViewer {
     public static void main(String[] args) {
 
-	List<Shape> shapeList = new ArrayList<>();
+
+	DiagramComponent comp = new DiagramComponent();
+	ArrayList<Shape> shapeList = new ArrayList<>();
 
 	Circle circle1 = new Circle(50, 40, 2, Color.BLUE);
 	Circle circle2 = new Circle(30, 10, 2, Color.RED);
@@ -33,8 +32,14 @@ public class TestShape
 	shapeList.add(text2);
 
 	for(Shape shape : shapeList) {
-	    //shape.draw(shap);
+	    comp.addShape(shape);
 	}
-    }
 
+
+	JFrame frame = new JFrame("ShapeViewer");
+	frame.setLayout(new BorderLayout());
+	frame.add(comp, BorderLayout.CENTER);
+	frame.setSize(800,600);
+	frame.setVisible(true);
+    }
 }

@@ -1,6 +1,6 @@
 package lab3;
 
-import javafx.scene.paint.Color;
+import java.awt.*;
 
 public abstract class AbstractShape implements Shape {
 

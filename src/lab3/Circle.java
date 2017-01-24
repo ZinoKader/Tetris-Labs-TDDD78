@@ -1,6 +1,6 @@
 package lab3;
 
-import javafx.scene.paint.Color;
+import java.awt.*;
 
 public class Circle extends AbstractShape {
 
@@ -24,7 +24,8 @@ public class Circle extends AbstractShape {
 	return "Circle{" + "x=" + getX() + ", y=" + getY() + ", radius=" + radius + ", color=" + getColor() + '}';
     }
 
-    @Override public void draw() {
-	System.out.println("Ritar: " + this);
+    @Override public void draw(final Graphics g) {
+	g.setColor(getColor());
+ 	g.drawOval(x, y, getRadius() * 2, getRadius() * 2); // calculated from radius!
     }
 }

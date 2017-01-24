@@ -1,12 +1,12 @@
 package lab3;
 
-import javafx.scene.paint.Color;
+import java.awt.*;
 
 public interface Shape {
 
     @Override String toString();
 
-    abstract void draw();
+    abstract void draw(final Graphics g);
 
     abstract int getX();
 
@@ -14,6 +14,6 @@ public interface Shape {
 
     abstract int getRadius();
 
-    abstract Color getColor();
+    abstract java.awt.Color getColor();
 
 }
