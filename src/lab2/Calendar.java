@@ -13,7 +13,7 @@ public class Calendar {
 
     public void show() {
 	for (Appointment appointment : appointments) {
-	    System.out.println(appointment.toString());
+	    System.out.println(appointment);
 	}
     }
 
