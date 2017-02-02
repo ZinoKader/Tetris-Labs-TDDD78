@@ -12,7 +12,7 @@ public final class BoardTest {
 	TetrominoMaker tetrominoMaker = new TetrominoMaker();
 
 	/*
-	testBoard.randomizeBoard();
+	testBoard.random®izeBoard();
 	testBoard.setFalling(tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes())));
 	testBoard.setFallingX(0);
 	testBoard.setFallingY(0);

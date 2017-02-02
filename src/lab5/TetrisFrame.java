@@ -2,14 +2,18 @@ package lab5;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EnumMap;
 
 public class TetrisFrame extends JFrame{
 
     public TetrisFrame(Board board) {
 	super("Zetris");
+	createMenu();
 
+	TetrisComponent gameComponent = new TetrisComponent(board, getDefaultSquareColors());
 
 	JTextArea gameArea = new JTextArea();
 	gameArea.setRows(board.getHeight());
@@ -32,6 +36,18 @@ public class TetrisFrame extends JFrame{
 	clockTimer.setCoalesce(true);
     	clockTimer.start();
 
+    }
+
+    private EnumMap<SquareType, Color> getDefaultSquareColors() {
+        EnumMap<SquareType, Color> squareColors = new EnumMap<>(SquareType.class);
+        squareColors.put(SquareType.S, Color.gray);
+        squareColors.put(SquareType.I, Color.blue);
+        squareColors.put(SquareType.J, Color.green);
+        squareColors.put(SquareType.L, Color.black);
+        squareColors.put(SquareType.O, Color.magenta);
+        squareColors.put(SquareType.T, Color.red);
+        squareColors.put(SquareType.Z, Color.gray);
+        return squareColors;
     }
 
     private void createMenu() {
