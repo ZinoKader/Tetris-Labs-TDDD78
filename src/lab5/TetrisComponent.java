@@ -1,10 +1,16 @@
 package lab5;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.EnumMap;
 
 public class TetrisComponent extends JComponent {
+
+    private static final int WINDOW_WIDTH = 512;
+    private static final int WINDOW_HEIGHT = 512;
+    private static final int RECTANGLE_WIDTH = 16;
+    private static final int RECTANGLE_HEIGHT = 16;
 
     private Board gameBoard;
     private EnumMap<SquareType,Color> squareColors;
@@ -18,12 +24,18 @@ public class TetrisComponent extends JComponent {
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
 
-	g2d.setColor(Color.GREEN);
-	g2d.drawRect(a, b, getPreferredSize().width / gameBoard.getWidth(), getPreferredSize().height / gameBoard.getHeight());
+	for(int row = 0; row < gameBoard.getHeight(); row++) {
+	    for(int col = 0; col < gameBoard.getWidth(); col++) {
+		SquareType square = gameBoard.getSquareType(col, row);
+		g2d.setColor(squareColors.get(square));
+		g2d.fillRect(col * RECTANGLE_WIDTH, row * RECTANGLE_HEIGHT,  RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+	    }
+	}
+
     }
 
     @Override public Dimension getPreferredSize() {
-	return new Dimension(500, 500);
+	return new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
 }

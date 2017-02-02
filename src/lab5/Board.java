@@ -28,7 +28,6 @@ public class Board {
     }
 
     public static void main(String[] args) {
-	Board gameBoard = new Board(50, 50);
     }
 
     public void randomizeBoard() {
@@ -52,7 +51,6 @@ public class Board {
 	return squares[y][x];
     }
 
-
     public void setFalling(Poly falling) {
 	this.falling = falling;
     }
@@ -60,7 +58,6 @@ public class Board {
     public void setFallingX(int fallingX) {
 	this.fallingX = fallingX;
     }
-
 
     public void setFallingY(int fallingY) {
 	this.fallingY = fallingY;

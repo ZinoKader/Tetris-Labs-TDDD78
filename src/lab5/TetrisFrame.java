@@ -15,20 +15,15 @@ public class TetrisFrame extends JFrame{
 
 	TetrisComponent gameComponent = new TetrisComponent(board, getDefaultSquareColors());
 
-	JTextArea gameArea = new JTextArea();
-	gameArea.setRows(board.getHeight());
-	gameArea.setColumns(board.getWidth());
-	gameArea.setFont(new Font("Monospaced", Font.PLAIN,20));
-
 	this.setLayout(new BorderLayout());
-	this.add(gameArea, BorderLayout.CENTER);
+	this.add(gameComponent, BorderLayout.CENTER);
 	this.pack();
 	this.setVisible(true);
 
 	final Action doOneStep = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
 		board.randomizeBoard();
-		gameArea.setText(BoardToTextConverter.convertToText(board));
+		gameComponent.repaint();
 	    }
 	};
 
