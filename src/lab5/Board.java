@@ -1,9 +1,11 @@
 package lab5;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
 
+    private ArrayList<BoardListener> boardListeners;
     private int width;
     private int height;
     private SquareType[][] squares;
@@ -16,6 +18,7 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
+        boardListeners = new ArrayList<>();
 	squares = new SquareType[height][width];
 	rnd = new Random();
 
@@ -37,6 +40,7 @@ public class Board {
 	        squares[h][w] = SquareType.values()[squareTypeIndex];
 	    }
 	}
+	notifyListeners();
     }
 
     public int getWidth() {
@@ -72,7 +76,17 @@ public class Board {
 		    }
 		}
 	    }
+	    notifyListeners();
 	}
     }
 
+    public void addBoardListener(BoardListener boardListener) {
+	boardListeners.add(boardListener);
+    }
+
+    private void notifyListeners() {
+        for(BoardListener boardListener: boardListeners) {
+            boardListener.boardChanged();
+	}
+    }
 }

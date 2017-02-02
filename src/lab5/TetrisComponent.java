@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.EnumMap;
 
-public class TetrisComponent extends JComponent {
+public class TetrisComponent extends JComponent implements BoardListener {
 
     private static final int WINDOW_WIDTH = 512;
     private static final int WINDOW_HEIGHT = 512;
@@ -38,4 +38,7 @@ public class TetrisComponent extends JComponent {
 	return new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
+    @Override public void boardChanged() {
+	repaint();
+    }
 }

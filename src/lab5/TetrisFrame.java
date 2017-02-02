@@ -14,6 +14,7 @@ public class TetrisFrame extends JFrame{
 	createMenu();
 
 	TetrisComponent gameComponent = new TetrisComponent(board, getDefaultSquareColors());
+	board.addBoardListener(gameComponent);
 
 	this.setLayout(new BorderLayout());
 	this.add(gameComponent, BorderLayout.CENTER);
@@ -23,7 +24,6 @@ public class TetrisFrame extends JFrame{
 	final Action doOneStep = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
 		board.randomizeBoard();
-		gameComponent.repaint();
 	    }
 	};
 
