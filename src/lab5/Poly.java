@@ -9,11 +9,9 @@ public class Poly {
 	this.polyShape = polyShape;
     }
 
-
     public SquareType[][] getPolyShape() {
 	return polyShape;
     }
-
 
     public int getWidth() { return this.polyShape.length; }
 

@@ -7,7 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
-public class TetrisFrame extends JFrame{
+public class TetrisFrame extends JFrame {
+
 
     public TetrisFrame(Board board) {
 	super("Zetris");
@@ -21,11 +22,32 @@ public class TetrisFrame extends JFrame{
 	this.pack();
 	this.setVisible(true);
 
+
 	final Action doOneStep = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
-		board.randomizeBoard();
+		board.tick();
 	    }
 	};
+
+	class LeftKeyAction extends AbstractAction {
+          @Override public void actionPerformed(final ActionEvent e) {
+              board.moveLeft();
+          }
+   	}
+
+   	class RightKeyAction extends AbstractAction {
+          @Override public void actionPerformed(final ActionEvent e) {
+              board.moveRight();
+          }
+   	}
+
+
+	final InputMap in = gameComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+      	in.put(KeyStroke.getKeyStroke("LEFT"), "moveleft");
+	in.put(KeyStroke.getKeyStroke("RIGHT"), "moveright");
+      	final ActionMap act = gameComponent.getActionMap();
+      	act.put("moveleft", new LeftKeyAction());
+	act.put("moveright", new RightKeyAction());
 
 	final Timer clockTimer = new Timer(500, doOneStep);
 	clockTimer.setCoalesce(true);
@@ -35,6 +57,7 @@ public class TetrisFrame extends JFrame{
 
     private EnumMap<SquareType, Color> getDefaultSquareColors() {
         EnumMap<SquareType, Color> squareColors = new EnumMap<>(SquareType.class);
+        squareColors.put(SquareType.EMPTY, Color.WHITE);
         squareColors.put(SquareType.S, Color.gray);
         squareColors.put(SquareType.I, Color.blue);
         squareColors.put(SquareType.J, Color.green);
@@ -57,12 +80,13 @@ public class TetrisFrame extends JFrame{
 
     private class QuitListener implements ActionListener {
 	@Override public void actionPerformed(final ActionEvent e) {
-	    if(JOptionPane.showConfirmDialog(null, "Do you really quit?",
+	    if(JOptionPane.showConfirmDialog(null, "Do you really want to quit?",
 					      "Quit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)  {
 	        System.exit(0);
 	    }
 	}
     }
+
 
 
 }

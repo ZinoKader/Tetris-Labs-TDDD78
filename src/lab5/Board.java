@@ -1,5 +1,7 @@
 package lab5;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -30,7 +32,19 @@ public class Board {
 
     }
 
-    public static void main(String[] args) {
+    public void tick() {
+	if(falling != null && fallingY + 2 < height) {
+	    removeFalling();
+	    fallingY++;
+	    addFalling();
+	} else {
+	    TetrominoMaker tetrominoMaker = new TetrominoMaker();
+	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
+	    this.fallingX = (width / 2) - 1;
+	    this.fallingY = 0;
+	    addFalling();
+	}
+	notifyListeners();
     }
 
     public void randomizeBoard() {
@@ -67,7 +81,7 @@ public class Board {
 	this.fallingY = fallingY;
     }
 
-    public void addFalling(){
+    public void addFalling() {
 	if(falling != null) {
 	    for(int row = 0; row < falling.getHeight(); row++) {
 	        for(int col = 0; col < falling.getWidth(); col++) {
@@ -76,6 +90,35 @@ public class Board {
 		    }
 		}
 	    }
+	    notifyListeners();
+	}
+    }
+
+    public void removeFalling() {
+	if(falling != null) {
+	    for(int row = 0; row < falling.getHeight(); row++) {
+	        for(int col = 0; col < falling.getWidth(); col++) {
+		    squares[row + fallingY][col + fallingX] = SquareType.EMPTY;
+		}
+	    }
+	    notifyListeners();
+	}
+    }
+
+    public void moveLeft() {
+        if(falling != null && fallingX - 1 >= 0) {
+	    removeFalling();
+	    fallingX--;
+	    addFalling();
+	    notifyListeners();
+	}
+    }
+
+    public void moveRight() {
+        if(falling != null && fallingX + falling.getWidth() < width) {
+	    removeFalling();
+	    fallingX++;
+	    addFalling();
 	    notifyListeners();
 	}
     }
