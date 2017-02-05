@@ -1,8 +1,7 @@
 package lab5;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Board {
@@ -15,44 +14,38 @@ public class Board {
     private Poly falling = null;
     private int fallingX;
     private int fallingY;
+    private static final int OUTSIDE_FRAME_SIZE = 2;
 
 
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
         boardListeners = new ArrayList<>();
-	squares = new SquareType[height][width];
+	squares = new SquareType[height + (OUTSIDE_FRAME_SIZE * 2)][width + (OUTSIDE_FRAME_SIZE * 2)];
 	rnd = new Random();
 
-	for(int h = 0; h < height; h++) {
-	    for(int w = 0; w < width; w++) {
-	        squares[h][w] = SquareType.EMPTY;
+	for(int row = 0; row < height + (OUTSIDE_FRAME_SIZE * 2); row++) {
+	    for(int col = 0; col < width + (OUTSIDE_FRAME_SIZE * 2); col++) {
+	        if(row < 2 || col < 2 || row > height + 1|| col > width + 1) {
+		    squares[row][col] = SquareType.OUTSIDE;
+		} else {
+		    squares[row][col] = SquareType.EMPTY;
+		}
 	    }
 	}
-
     }
 
     public void tick() {
-	if(falling != null && fallingY + 2 < height) {
+	if(falling != null) {
 	    removeFalling();
 	    fallingY++;
 	    addFalling();
 	} else {
 	    TetrominoMaker tetrominoMaker = new TetrominoMaker();
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
-	    this.fallingX = (width / 2) - 1;
-	    this.fallingY = 0;
+	    this.fallingX = (width / 2);
+	    this.fallingY = OUTSIDE_FRAME_SIZE; //Block should start falling from inside the frame
 	    addFalling();
-	}
-	notifyListeners();
-    }
-
-    public void randomizeBoard() {
-	for(int h = 0; h < height; h++) {
-	    for(int w = 0; w < width; w++) {
-	        int squareTypeIndex = rnd.nextInt(SquareType.values().length);
-	        squares[h][w] = SquareType.values()[squareTypeIndex];
-	    }
 	}
 	notifyListeners();
     }
@@ -66,19 +59,7 @@ public class Board {
     }
 
     public SquareType getSquareType(int x, int y) {
-	return squares[y][x];
-    }
-
-    public void setFalling(Poly falling) {
-	this.falling = falling;
-    }
-
-    public void setFallingX(int fallingX) {
-	this.fallingX = fallingX;
-    }
-
-    public void setFallingY(int fallingY) {
-	this.fallingY = fallingY;
+	return squares[y + 2][x + 2];
     }
 
     public void addFalling() {
@@ -106,21 +87,46 @@ public class Board {
     }
 
     public void moveLeft() {
-        if(falling != null && fallingX - 1 >= 0) {
-	    removeFalling();
-	    fallingX--;
-	    addFalling();
+        if(falling != null) {
+            fallingX--;
+            if(hasCollision()) {
+		fallingX++;
+	    } else {
+		fallingX++;
+		removeFalling();
+		fallingX--;
+		addFalling();
+	    }
 	    notifyListeners();
 	}
     }
 
     public void moveRight() {
-        if(falling != null && fallingX + falling.getWidth() < width) {
-	    removeFalling();
-	    fallingX++;
-	    addFalling();
+	if(falling != null) {
+            fallingX++;
+            if(hasCollision()) {
+		System.out.println(fallingX);
+                fallingX--;
+	    } else {
+		fallingX--;
+     		removeFalling();
+		fallingX++;
+	     	addFalling();
+	    }
 	    notifyListeners();
 	}
+    }
+
+    public boolean hasCollision() {
+        for(int row = 0; row < falling.getHeight(); row++) {
+            for(int col = 0; col < falling.getWidth(); col++) {
+                if(falling.getPolyShape()[row][col] != SquareType.EMPTY && squares[fallingY][fallingX + col] != SquareType.EMPTY) {
+		    System.out.println(squares[fallingY][fallingX]);
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public void addBoardListener(BoardListener boardListener) {

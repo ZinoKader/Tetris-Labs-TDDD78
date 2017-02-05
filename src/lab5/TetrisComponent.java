@@ -7,10 +7,8 @@ import java.util.EnumMap;
 
 public class TetrisComponent extends JComponent implements BoardListener {
 
-    private static final int WINDOW_WIDTH = 512;
-    private static final int WINDOW_HEIGHT = 512;
-    private static final int RECTANGLE_WIDTH = 16;
-    private static final int RECTANGLE_HEIGHT = 16;
+    private static final int RECTANGLE_WIDTH = 24;
+    private static final int RECTANGLE_HEIGHT = 24;
 
     private Board gameBoard;
     private EnumMap<SquareType,Color> squareColors;
@@ -26,6 +24,7 @@ public class TetrisComponent extends JComponent implements BoardListener {
 
 	for(int row = 0; row < gameBoard.getHeight(); row++) {
 	    for(int col = 0; col < gameBoard.getWidth(); col++) {
+
 		SquareType square = gameBoard.getSquareType(col, row);
 		g2d.setColor(squareColors.get(square));
 		g2d.fillRect(col * RECTANGLE_WIDTH, row * RECTANGLE_HEIGHT,  RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
@@ -34,8 +33,12 @@ public class TetrisComponent extends JComponent implements BoardListener {
 
     }
 
+    /**
+     * Fönstrets storlek bestäms utifrån blockstorlek
+     *
+     */
     @Override public Dimension getPreferredSize() {
-	return new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
+	return new Dimension(gameBoard.getWidth() * RECTANGLE_WIDTH, gameBoard.getHeight() * RECTANGLE_HEIGHT);
     }
 
     @Override public void boardChanged() {

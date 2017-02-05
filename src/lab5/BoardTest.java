@@ -4,10 +4,13 @@ import java.util.Random;
 
 public final class BoardTest {
 
+    private static final int BOARD_WIDTH = 24;
+    private static final int BOARD_HEIGHT = 36;
+
     public static void main(String[] args) {
 
 	TetrisFrame gameFrame;
-	Board testBoard = new Board(32, 32);
+	Board testBoard = new Board(BOARD_WIDTH, BOARD_HEIGHT);
 	Random rnd = new Random();
 	TetrominoMaker tetrominoMaker = new TetrominoMaker();
 

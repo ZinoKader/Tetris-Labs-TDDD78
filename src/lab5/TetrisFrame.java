@@ -57,14 +57,15 @@ public class TetrisFrame extends JFrame {
 
     private EnumMap<SquareType, Color> getDefaultSquareColors() {
         EnumMap<SquareType, Color> squareColors = new EnumMap<>(SquareType.class);
+        squareColors.put(SquareType.OUTSIDE, Color.black);
         squareColors.put(SquareType.EMPTY, Color.WHITE);
-        squareColors.put(SquareType.S, Color.gray);
-        squareColors.put(SquareType.I, Color.blue);
-        squareColors.put(SquareType.J, Color.green);
-        squareColors.put(SquareType.L, Color.black);
-        squareColors.put(SquareType.O, Color.magenta);
-        squareColors.put(SquareType.T, Color.red);
-        squareColors.put(SquareType.Z, Color.gray);
+        squareColors.put(SquareType.S, new Color(56, 200, 36));
+        squareColors.put(SquareType.I, new Color(122, 188, 200));
+        squareColors.put(SquareType.J, new Color(200, 163, 49));
+        squareColors.put(SquareType.L, new Color(0, 45, 200));
+        squareColors.put(SquareType.O, new Color(194, 200, 67));
+        squareColors.put(SquareType.T, new Color(132, 15, 200));
+        squareColors.put(SquareType.Z, new Color(200, 44, 40));
         return squareColors;
     }
 
