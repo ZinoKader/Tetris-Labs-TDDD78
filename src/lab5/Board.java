@@ -1,7 +1,6 @@
 package lab5;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Board {
@@ -14,6 +13,7 @@ public class Board {
     private Poly falling = null;
     private int fallingX;
     private int fallingY;
+    private boolean isGameOver = false;
     private static final int OUTSIDE_FRAME_SIZE = 2;
 
 
@@ -36,16 +36,26 @@ public class Board {
     }
 
     public void tick() {
+	System.out.println(isGameOver);
+	if(isGameOver) {
+	    notifyListeners();
+            return;
+	}
 	if(falling != null) {
-	    removeFalling();
-	    fallingY++;
-	    addFalling();
+	    if(fallingWillReachBottom()) {
+		this.falling = null;
+	    } else {
+		removeFalling();
+		fallingY++;
+		addFalling();
+	    }
 	} else {
 	    TetrominoMaker tetrominoMaker = new TetrominoMaker();
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
-	    this.fallingX = (width / 2);
+	    this.fallingX = width / 2;
 	    this.fallingY = OUTSIDE_FRAME_SIZE; //Block should start falling from inside the frame
 	    addFalling();
+	    //if(fallingHasCollision()) { isGameOver = true; }
 	}
 	notifyListeners();
     }
@@ -89,7 +99,7 @@ public class Board {
     public void moveLeft() {
 	if(falling != null) {
 	    fallingX--;
-            if(!hasCollision()) {
+            if(!fallingHasCollision()) {
                 fallingX++;
      		removeFalling();
 		fallingX--;
@@ -104,7 +114,7 @@ public class Board {
     public void moveRight() {
 	if(falling != null) {
 	    fallingX += falling.getWidth();
-            if(!hasCollision()) {
+            if(!fallingHasCollision()) {
                 fallingX -= falling.getWidth(); //We want our current falling pos to be removed
      		removeFalling();
 		fallingX++; //Add back to the new falling pos so we can create our block at it
@@ -116,18 +126,30 @@ public class Board {
 	}
     }
 
-    public boolean hasCollision() {
+    public boolean fallingHasCollision() {
         for(int row = 0; row < falling.getHeight(); row++) {
             for(int col = 0; col < falling.getWidth(); col++) {
                 if(falling.getPolyShape()[row][col] != SquareType.EMPTY &&
 		   squares[fallingY][fallingX] != SquareType.EMPTY) {
-		    System.out.println(squares[fallingY][fallingX]);
 		    return true;
 		}
 	    }
 	}
 	return false;
     }
+
+    public boolean fallingWillReachBottom() {
+	for(int row = 0; row < falling.getHeight(); row++) {
+	    for(int col = 0; col < falling.getWidth(); col++) {
+		if(falling.getPolyShape()[row][col] != SquareType.EMPTY &&
+		   squares[fallingY + falling.getHeight() + 1][fallingX] != SquareType.EMPTY) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
 
     public void addBoardListener(BoardListener boardListener) {
 	boardListeners.add(boardListener);
