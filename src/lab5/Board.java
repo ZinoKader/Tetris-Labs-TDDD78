@@ -26,7 +26,7 @@ public class Board {
 
 	for(int row = 0; row < height + (OUTSIDE_FRAME_SIZE * 2); row++) {
 	    for(int col = 0; col < width + (OUTSIDE_FRAME_SIZE * 2); col++) {
-	        if(row < 2 || col < 2 || row > height + 1|| col > width + 1) {
+	        if(row < 2 || col < 2 || row > height + 1 || col > width + 1) {
 		    squares[row][col] = SquareType.OUTSIDE;
 		} else {
 		    squares[row][col] = SquareType.EMPTY;
@@ -87,15 +87,15 @@ public class Board {
     }
 
     public void moveLeft() {
-        if(falling != null) {
-            fallingX--;
-            if(hasCollision()) {
-		fallingX++;
-	    } else {
-		fallingX++;
-		removeFalling();
+	if(falling != null) {
+	    fallingX--;
+            if(!hasCollision()) {
+                fallingX++;
+     		removeFalling();
 		fallingX--;
-		addFalling();
+	     	addFalling();
+	    } else {
+                fallingX++;
 	    }
 	    notifyListeners();
 	}
@@ -103,15 +103,14 @@ public class Board {
 
     public void moveRight() {
 	if(falling != null) {
-            fallingX++;
-            if(hasCollision()) {
-		System.out.println(fallingX);
-                fallingX--;
-	    } else {
-		fallingX--;
+	    fallingX += falling.getWidth();
+            if(!hasCollision()) {
+                fallingX -= falling.getWidth(); //We want our current falling pos to be removed
      		removeFalling();
-		fallingX++;
+		fallingX++; //Add back to the new falling pos so we can create our block at it
 	     	addFalling();
+	    } else {
+                fallingX -= falling.getWidth();
 	    }
 	    notifyListeners();
 	}
@@ -120,7 +119,8 @@ public class Board {
     public boolean hasCollision() {
         for(int row = 0; row < falling.getHeight(); row++) {
             for(int col = 0; col < falling.getWidth(); col++) {
-                if(falling.getPolyShape()[row][col] != SquareType.EMPTY && squares[fallingY][fallingX + col] != SquareType.EMPTY) {
+                if(falling.getPolyShape()[row][col] != SquareType.EMPTY &&
+		   squares[fallingY][fallingX] != SquareType.EMPTY) {
 		    System.out.println(squares[fallingY][fallingX]);
 		    return true;
 		}
