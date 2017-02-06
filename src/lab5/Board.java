@@ -38,11 +38,10 @@ public class Board {
     public void tick() {
 	System.out.println(isGameOver);
 	if(isGameOver) {
-	    notifyListeners();
             return;
 	}
 	if(falling != null) {
-	    if(fallingWillReachBottom()) {
+	    if(getFallingBottomY() > height || fallingWillReachBottom()) {
 		this.falling = null;
 	    } else {
 		removeFalling();
@@ -76,8 +75,8 @@ public class Board {
 	if(falling != null) {
 	    for(int row = 0; row < falling.getHeight(); row++) {
 	        for(int col = 0; col < falling.getWidth(); col++) {
-		    if(falling.getPolyShape()[row][col] != SquareType.EMPTY) {
-			squares[row + fallingY][col + fallingX] = falling.getPolyShape()[row][col];
+		    if(falling.getPoly()[row][col] != SquareType.EMPTY) {
+			squares[row + fallingY][col + fallingX] = falling.getPoly()[row][col];
 		    }
 		}
 	    }
@@ -129,7 +128,7 @@ public class Board {
     public boolean fallingHasCollision() {
         for(int row = 0; row < falling.getHeight(); row++) {
             for(int col = 0; col < falling.getWidth(); col++) {
-                if(falling.getPolyShape()[row][col] != SquareType.EMPTY &&
+                if(falling.getPoly()[row][col] != SquareType.EMPTY &&
 		   squares[fallingY][fallingX] != SquareType.EMPTY) {
 		    return true;
 		}
@@ -141,13 +140,27 @@ public class Board {
     public boolean fallingWillReachBottom() {
 	for(int row = 0; row < falling.getHeight(); row++) {
 	    for(int col = 0; col < falling.getWidth(); col++) {
-		if(falling.getPolyShape()[row][col] != SquareType.EMPTY &&
-		   squares[fallingY + falling.getHeight() + 1][fallingX] != SquareType.EMPTY) {
-		    return true;
+	        if(falling.getPoly()[row][col] != SquareType.EMPTY) { //vi undersöker understa raden som har icke-tomma block
+		    if (squares[getFallingBottomY() + 1][fallingX + col] != SquareType.EMPTY) {
+			return true;
+		    }
 		}
 	    }
 	}
 	return false;
+    }
+
+    public int getFallingBottomY() {
+	int bottomY = 0;
+	for(int row = 0; row < falling.getHeight(); row++) {
+	    for(int col = 0; col < falling.getWidth(); col++) {
+		if(falling.getPoly()[row][col] != SquareType.EMPTY){
+		    bottomY = row;
+		    break;
+		}
+	    }
+	}
+	return bottomY + fallingY;
     }
 
 

@@ -9,7 +9,7 @@ public class Poly {
 	this.polyShape = polyShape;
     }
 
-    public SquareType[][] getPolyShape() {
+    public SquareType[][] getPoly() {
 	return polyShape;
     }
 

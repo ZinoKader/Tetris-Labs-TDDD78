@@ -4,8 +4,8 @@ import java.util.Random;
 
 public final class BoardTest {
 
-    private static final int BOARD_WIDTH = 24;
-    private static final int BOARD_HEIGHT = 36;
+    private static final int BOARD_WIDTH = 12;
+    private static final int BOARD_HEIGHT = 16;
 
     public static void main(String[] args) {
 

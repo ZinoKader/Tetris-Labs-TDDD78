@@ -49,7 +49,7 @@ public class TetrisFrame extends JFrame {
       	act.put("moveleft", new LeftKeyAction());
 	act.put("moveright", new RightKeyAction());
 
-	final Timer clockTimer = new Timer(500, doOneStep);
+	final Timer clockTimer = new Timer(200, doOneStep);
 	clockTimer.setCoalesce(true);
     	clockTimer.start();
 
