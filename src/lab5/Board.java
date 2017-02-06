@@ -141,7 +141,7 @@ public class Board {
 	for(int row = 0; row < falling.getHeight(); row++) {
 	    for(int col = 0; col < falling.getWidth(); col++) {
 	        if(falling.getPoly()[row][col] != SquareType.EMPTY) {
-		    if (squares[fallingY + getFallingBottomY() + 1][fallingX + col] != SquareType.EMPTY) {
+		    if (squares[fallingY + falling.getHeight() - getFallingBottomY()][fallingX + col] != SquareType.EMPTY) {
 			return true;
 		    }
 		}
