@@ -41,13 +41,21 @@ public class TetrisFrame extends JFrame {
           }
    	}
 
+	class EscapeKeyAction extends AbstractAction {
+        @Override public void actionPerformed(final ActionEvent e) {
+            System.exit(0);
+	  }
+ 	}
+
 
 	final InputMap in = gameComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
       	in.put(KeyStroke.getKeyStroke("LEFT"), "moveleft");
 	in.put(KeyStroke.getKeyStroke("RIGHT"), "moveright");
+	in.put(KeyStroke.getKeyStroke("ESCAPE"), "exitescape");
       	final ActionMap act = gameComponent.getActionMap();
       	act.put("moveleft", new LeftKeyAction());
 	act.put("moveright", new RightKeyAction());
+	act.put("exitescape", new EscapeKeyAction());
 
 	final Timer clockTimer = new Timer(200, doOneStep);
 	clockTimer.setCoalesce(true);

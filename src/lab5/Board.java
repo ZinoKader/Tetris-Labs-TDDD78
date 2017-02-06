@@ -140,8 +140,8 @@ public class Board {
     public boolean fallingWillReachBottom() {
 	for(int row = 0; row < falling.getHeight(); row++) {
 	    for(int col = 0; col < falling.getWidth(); col++) {
-	        if(falling.getPoly()[row][col] != SquareType.EMPTY) { //vi undersöker understa raden som har icke-tomma block
-		    if (squares[getFallingBottomY() + 1][fallingX + col] != SquareType.EMPTY) {
+	        if(falling.getPoly()[row][col] != SquareType.EMPTY) {
+		    if (squares[fallingY + getFallingBottomY() + 1][fallingX + col] != SquareType.EMPTY) {
 			return true;
 		    }
 		}
@@ -150,17 +150,21 @@ public class Board {
 	return false;
     }
 
+    /**
+     * We go through the falling block from the bottom to the top.
+     * As soon as a row that contains a non-empty block is found, we return it.
+     */
     public int getFallingBottomY() {
-	int bottomY = 0;
-	for(int row = 0; row < falling.getHeight(); row++) {
+	int bottomY = falling.getHeight();
+	for(int row = falling.getHeight() - 1; row >= 0; row--) {
 	    for(int col = 0; col < falling.getWidth(); col++) {
 		if(falling.getPoly()[row][col] != SquareType.EMPTY){
 		    bottomY = row;
-		    break;
+		    return bottomY;
 		}
 	    }
 	}
-	return bottomY + fallingY;
+	return bottomY;
     }
 
 
