@@ -55,7 +55,15 @@ public class Board {
 		squares[row][col] = SquareType.EMPTY;
 	    }
 	}
-     }
+    }
+
+    public void clearBoard() {
+	this.falling = null;
+ 	this.isGameOver = false;
+	this.score = 0;
+ 	this.removedRows = 0;
+ 	createBoard();
+    }
 
     public void tick() {
 
@@ -242,6 +250,10 @@ public class Board {
 
     public void addBoardListener(BoardListener boardListener) {
 	boardListeners.add(boardListener);
+    }
+
+    public void removeAllListeners() {
+        boardListeners = new ArrayList<>();
     }
 
     private void notifyListeners() {

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +21,7 @@ public class TetrisFrame extends JFrame {
     private TetrisComponent gameComponent;
     private ScoreboardComponent scoreboardComponent;
     private Timer clockTimer;
+    private KeyListener restartGameListener;
     private InputMap in;
     private ActionMap act;
     private Board board;
@@ -42,10 +44,35 @@ public class TetrisFrame extends JFrame {
 	bindKeys();
 	startTimer();
 	startMusic();
+
+	restartGameListener = new KeyListener() {
+	    @Override public void keyTyped(final KeyEvent e) {
+
+	    }
+
+	    @Override public void keyPressed(final KeyEvent e) {
+		startNewGame();
+	    }
+
+	    @Override public void keyReleased(final KeyEvent e) {
+
+	    }
+	};
+    }
+
+    private void startNewGame() {
+	this.remove(scoreboardComponent);
+	this.add(gameComponent, BorderLayout.CENTER);
+	this.pack();
+	this.setVisible(true);
+	this.repaint();
+	board.clearBoard();
+	board.removeAllListeners();
+	board.addBoardListener(gameComponent);
+	startTimer();
     }
 
     private void startMusic() {
-
 	URL url = getClass().getResource("Tetris.wav");
 	try {
 	    Clip clip = AudioSystem.getClip();
@@ -72,6 +99,7 @@ public class TetrisFrame extends JFrame {
 	final Action doOneStep = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
 	        if(!board.isGameOver()) {
+	            stopListenForNewGame();
 		    board.tick();
 		} else {
 		    System.out.println("GAME OVER!");
@@ -89,7 +117,6 @@ public class TetrisFrame extends JFrame {
     }
 
     private void showHighscoreList() {
-
 	String playerName = "";
 	while (playerName.isEmpty()) {
 	    playerName = JOptionPane.showInputDialog("Enter your name: ");
@@ -101,25 +128,16 @@ public class TetrisFrame extends JFrame {
 	this.pack();
 	this.setVisible(true);
 	this.repaint();
-
     }
 
     private void listenForNewGame() {
-	this.addKeyListener(new KeyListener() {
-	    @Override public void keyTyped(final java.awt.event.KeyEvent e) {
-
-	    }
-
-	    @Override public void keyPressed(final java.awt.event.KeyEvent e) {
-		board = null;
-	    }
-
-
-	    @Override public void keyReleased(final java.awt.event.KeyEvent e) {
-
-	    }
-	});
+	this.addKeyListener(restartGameListener);
     }
+
+    private void stopListenForNewGame() {
+        this.removeKeyListener(restartGameListener);
+    }
+
 
     private class LeftKeyAction extends AbstractAction {
 	@Override public void actionPerformed(final ActionEvent e) {

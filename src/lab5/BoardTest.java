@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public final class BoardTest {
 
-    private static final int BOARD_WIDTH = 10;
+    private static final int BOARD_WIDTH = 11;
     private static final int BOARD_HEIGHT = 22;
 
     public static void main(String[] args) {
