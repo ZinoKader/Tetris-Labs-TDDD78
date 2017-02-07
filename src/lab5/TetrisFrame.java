@@ -9,6 +9,8 @@ import java.util.EnumMap;
 
 public class TetrisFrame extends JFrame {
 
+    private Timer clockTimer;
+
 
     public TetrisFrame(Board board) {
 	super("Zetris");
@@ -25,7 +27,12 @@ public class TetrisFrame extends JFrame {
 
 	final Action doOneStep = new AbstractAction() {
 	    public void actionPerformed(ActionEvent e) {
-		board.tick();
+	        if(!board.isGameOver()) {
+		    board.tick();
+		} else {
+		    System.out.println("GAME OVER!");
+	            clockTimer.stop();
+		}
 	    }
 	};
 
@@ -57,7 +64,7 @@ public class TetrisFrame extends JFrame {
 	act.put("moveright", new RightKeyAction());
 	act.put("exitescape", new EscapeKeyAction());
 
-	final Timer clockTimer = new Timer(200, doOneStep);
+	clockTimer = new Timer(200, doOneStep);
 	clockTimer.setCoalesce(true);
     	clockTimer.start();
 

@@ -10,7 +10,7 @@ public final class BoardToTextConverter {
 	    for(int col = 0; col < board.getWidth(); col++) {
 
 
-		SquareType square = board.getSquareType(col, row);
+		SquareType square = board.getSquare(col, row);
 
 
 	        switch(square) {
