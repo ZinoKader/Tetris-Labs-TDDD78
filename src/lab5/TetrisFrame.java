@@ -37,7 +37,7 @@ public class TetrisFrame extends JFrame {
 
 
     public TetrisFrame(Board board) {
-	super("Zetris");
+	super("Zetris: Zino Kader");
 	createMenu();
 
 	this.board = board;

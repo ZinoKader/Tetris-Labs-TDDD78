@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TDDD78 Labbar:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TDDD78_Labbar_jar</output-path>
+    <root id="archive" name="TDDD78 Labbar.jar">
+      <element id="module-output" name="TDDD78 Labbar" />
+    </root>
+  </artifact>
+</component>
