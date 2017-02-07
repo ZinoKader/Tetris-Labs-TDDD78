@@ -55,7 +55,7 @@ public class Board {
 	else if(this.falling == null) {
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
 	    if(falling != null) { //Sometimes gets NPEs otherwise. No idea why.
-		if(falling.getWidth() == 2) {
+		if(falling.getWidth() == 2) { //account for O-blocks unique size
 		    this.fallingX = (width / 2) - 1;
 		} else {
 		    this.fallingX = (width / 2) - 2;
@@ -70,6 +70,25 @@ public class Board {
 	    fallDown();
 	}
 	notifyListeners();
+    }
+
+    public void rotate(boolean b) {
+        if(falling != null) {
+            Poly oldFalling;
+            if(b) {
+                oldFalling = falling;
+                falling = falling.rotateRight();
+                if(hasCollision()) {
+                    falling = oldFalling;
+		}
+	    } else {
+		oldFalling = falling;
+		falling = falling.rotateLeft();
+		if(hasCollision()) {
+		    falling = oldFalling;
+		}
+	    }
+	}
     }
 
     public int getWidth() {
@@ -137,7 +156,6 @@ public class Board {
     }
 
     public boolean hasCollision() {
-	System.out.println(falling);
 	for(int y = 0; y < falling.getHeight(); y++){
 	    for(int x = 0; x < falling.getWidth(); x++){
 		if (getSquare(fallingX + x, fallingY + y) != SquareType.EMPTY &&

@@ -7,8 +7,8 @@ import java.util.EnumMap;
 
 public class TetrisComponent extends JComponent implements BoardListener {
 
-    private static final int RECTANGLE_WIDTH = 24;
-    private static final int RECTANGLE_HEIGHT = 24;
+    private static final int RECTANGLE_WIDTH = 30;
+    private static final int RECTANGLE_HEIGHT = 30;
     private static final int BLOCK_OUTLINE_SIZE = 1;
 
     private Board gameBoard;
