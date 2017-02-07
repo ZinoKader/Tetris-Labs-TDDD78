@@ -22,10 +22,18 @@ public class TetrisFrame extends JFrame {
     private ScoreboardComponent scoreboardComponent;
     private Timer clockTimer;
     private KeyListener restartGameListener;
-    private InputMap in;
-    private ActionMap act;
     private Board board;
     private HighscoreList highscoreList = HighscoreList.getInstance();
+
+    private static final int TICK_RATE = 140;
+    private static final int COLOR_I = 0x07FFFF;
+    private static final int COLOR_J = 0x1100FF;
+    private static final int COLOR_L = 0xFFA500;
+    private static final int COLOR_O = 0xFEFF00;
+    private static final int COLOR_S = 0x00FF00;
+    private static final int COLOR_T = 0x800180;
+    private static final int COLOR_Z = 0xFF0100;
+
 
 
     public TetrisFrame(Board board) {
@@ -86,13 +94,13 @@ public class TetrisFrame extends JFrame {
     }
 
     private void createMenu() {
-	final JMenuBar bar = new JMenuBar();
+	final JMenuBar menuBar = new JMenuBar();
 	final JMenu menu = new JMenu("Options");
 	JMenuItem quit = new JMenuItem("Quit");
 	quit.addActionListener(new QuitListener());
 	menu.add(quit);
-	bar.add(menu);
-	this.setJMenuBar(bar);
+	menuBar.add(menu);
+	this.setJMenuBar(menuBar);
     }
 
     private void startTimer() {
@@ -111,7 +119,7 @@ public class TetrisFrame extends JFrame {
 	};
 
 
-	clockTimer = new Timer(200, doOneStep);
+	clockTimer = new Timer(TICK_RATE, doOneStep);
 	clockTimer.setCoalesce(true);
     	clockTimer.start();
     }
@@ -151,6 +159,12 @@ public class TetrisFrame extends JFrame {
 	}
     }
 
+    private class DownKeyAction extends AbstractAction {
+	@Override public void actionPerformed(final ActionEvent e) {
+	    board.moveDown();
+	}
+    }
+
     private class UpKeyAction extends AbstractAction {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    board.rotate(true);
@@ -164,13 +178,15 @@ public class TetrisFrame extends JFrame {
     }
 
     private void bindKeys() {
-	in = gameComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-	act = gameComponent.getActionMap();
+	final InputMap in = gameComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+	final ActionMap act = gameComponent.getActionMap();
 	in.put(KeyStroke.getKeyStroke("UP"), "up");
+	in.put(KeyStroke.getKeyStroke("DOWN"), "down");
 	in.put(KeyStroke.getKeyStroke("LEFT"), "left");
 	in.put(KeyStroke.getKeyStroke("RIGHT"), "right");
 	in.put(KeyStroke.getKeyStroke("ESCAPE"), "escape");
 	act.put("up", new UpKeyAction());
+	act.put("down", new DownKeyAction());
 	act.put("left", new LeftKeyAction());
 	act.put("right", new RightKeyAction());
 	act.put("escape", new EscapeKeyAction());
@@ -178,15 +194,15 @@ public class TetrisFrame extends JFrame {
 
     private EnumMap<SquareType, Color> getDefaultSquareColors() {
          EnumMap<SquareType, Color> squareColors = new EnumMap<>(SquareType.class);
-         squareColors.put(SquareType.OUTSIDE, Color.black);
+         squareColors.put(SquareType.OUTSIDE, Color.BLACK);
          squareColors.put(SquareType.EMPTY, Color.WHITE);
-         squareColors.put(SquareType.S, new Color(56, 200, 36));
-         squareColors.put(SquareType.I, new Color(122, 188, 200));
-         squareColors.put(SquareType.J, new Color(200, 163, 49));
-         squareColors.put(SquareType.L, new Color(0, 45, 200));
-         squareColors.put(SquareType.O, new Color(194, 200, 67));
-         squareColors.put(SquareType.T, new Color(132, 15, 200));
-         squareColors.put(SquareType.Z, new Color(200, 44, 40));
+         squareColors.put(SquareType.S, new Color(COLOR_S));
+         squareColors.put(SquareType.I, new Color(COLOR_I));
+         squareColors.put(SquareType.J, new Color(COLOR_J));
+         squareColors.put(SquareType.L, new Color(COLOR_L));
+         squareColors.put(SquareType.O, new Color(COLOR_O));
+         squareColors.put(SquareType.T, new Color(COLOR_T));
+         squareColors.put(SquareType.Z, new Color(COLOR_Z));
          return squareColors;
      }
 

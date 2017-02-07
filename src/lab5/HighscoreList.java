@@ -1,6 +1,7 @@
 package lab5;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class HighscoreList {
@@ -17,10 +18,10 @@ public final class HighscoreList {
 
     public void addHighscore(Highscore highscore) {
         highScoreList.add(highscore);
-        highScoreList.sort(new ScoreComparator());
     }
 
     public List<Highscore> getHighscorelist() {
+	highScoreList.sort(Collections.reverseOrder(new ScoreComparator())); //Orders descending instead of default ascending
         return highScoreList;
     }
 

@@ -19,7 +19,7 @@ public class Board {
 
     private int removedRows;
     private int score;
-    private boolean isGameOver;
+    private boolean gameOver;
 
     private static final int OUTSIDE_FRAME_SIZE = 2;
     private static final int ROW_SCORE_1 = 100;
@@ -32,7 +32,7 @@ public class Board {
         this.width = width;
         this.height = height;
         this.falling = null;
-        this.isGameOver = false;
+        this.gameOver = false;
         this.score = 0;
 
         boardListeners = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Board {
 
     public void clearBoard() {
 	this.falling = null;
- 	this.isGameOver = false;
+ 	this.gameOver = false;
 	this.score = 0;
  	this.removedRows = 0;
  	createBoard();
@@ -69,22 +69,18 @@ public class Board {
 
         removedRows = 0;
 
-	if(isGameOver) {
+	if(gameOver) {
 	    System.out.println("GAME OVER!");
 	    return;
 	}
 	else if(this.falling == null) {
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
 	    if(falling != null) { //Sometimes gets NPEs otherwise, no idea why ¯\_(ツ)_/¯
-		if(falling.getWidth() == 2) { //account for O-blocks' unique size
-		    this.fallingX = (width / 2) - 1;
-		} else {
-		    this.fallingX = (width / 2) - 2;
-		}
+		this.fallingX = (width / 2) - 1;
 		this.fallingY = 0; //Block should start falling from inside the frame
 		if (hasCollision()) {
 		    this.falling = null;
-		    this.isGameOver = true;
+		    this.gameOver = true;
 		}
 	    }
 	} else {
@@ -149,8 +145,6 @@ public class Board {
 
     private void addScore() {
 	switch(removedRows) {
-	    case 0:
-	        break;
 	    case 1:
 	        score += ROW_SCORE_1;
 	        break;
@@ -163,9 +157,6 @@ public class Board {
 	    case 4:
 		score += ROW_SCORE_4;
 		break;
-	    default:
-	        score += ROW_SCORE_4;
-	        break;
 	}
     }
 
@@ -232,11 +223,18 @@ public class Board {
 	notifyListeners();
     }
 
+    public void moveDown() {
+        fallingY++;
+        if(hasCollision()) {
+            fallingY--;
+	}
+	notifyListeners();
+    }
+
     public boolean hasCollision() {
-	for(int row = 0; row < falling.getHeight(); row++){
-	    for(int col = 0; col < falling.getWidth(); col++){
-		if (getSquare(fallingX + col, fallingY + row) != SquareType.EMPTY &&
-		    falling.getPoly()[row][col] != SquareType.EMPTY) {
+	for(int row = 0; row < falling.getHeight(); row++) {
+	    for(int col = 0; col < falling.getWidth(); col++) {
+		if(falling.getPoly()[row][col] != SquareType.EMPTY && getSquare(fallingX + col, fallingY + row) != SquareType.EMPTY) {
 		    return true;
 		}
 	    }
@@ -245,7 +243,7 @@ public class Board {
     }
 
     public boolean isGameOver() {
-	return isGameOver;
+	return gameOver;
     }
 
     public void addBoardListener(BoardListener boardListener) {
