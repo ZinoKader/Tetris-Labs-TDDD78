@@ -1,19 +1,29 @@
 package lab5;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URL;
 import java.util.EnumMap;
 
 public class TetrisFrame extends JFrame {
 
     private TetrisComponent gameComponent;
+    private ScoreboardComponent scoreboardComponent;
     private Timer clockTimer;
     private InputMap in;
     private ActionMap act;
     private Board board;
+    private HighscoreList highscoreList = HighscoreList.getInstance();
 
 
     public TetrisFrame(Board board) {
@@ -22,6 +32,7 @@ public class TetrisFrame extends JFrame {
 
 	this.board = board;
 	gameComponent = new TetrisComponent(board, getDefaultSquareColors());
+	scoreboardComponent = new ScoreboardComponent();
 	board.addBoardListener(gameComponent);
 	this.setLayout(new BorderLayout());
 	this.add(gameComponent, BorderLayout.CENTER);
@@ -30,7 +41,21 @@ public class TetrisFrame extends JFrame {
 
 	bindKeys();
 	startTimer();
+	startMusic();
+    }
 
+    private void startMusic() {
+
+	URL url = getClass().getResource("Tetris.wav");
+	try {
+	    Clip clip = AudioSystem.getClip();
+	    AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+	    clip.open(ais);
+	    clip.loop(Clip.LOOP_CONTINUOUSLY);
+	} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+	    System.out.println("Something went wrong when trying to play the background music.");
+	    e.printStackTrace();
+	}
     }
 
     private void createMenu() {
@@ -51,6 +76,8 @@ public class TetrisFrame extends JFrame {
 		} else {
 		    System.out.println("GAME OVER!");
 	            clockTimer.stop();
+		    showHighscoreList();
+		    listenForNewGame();
 		}
 	    }
 	};
@@ -59,6 +86,39 @@ public class TetrisFrame extends JFrame {
 	clockTimer = new Timer(200, doOneStep);
 	clockTimer.setCoalesce(true);
     	clockTimer.start();
+    }
+
+    private void showHighscoreList() {
+
+	String playerName = "";
+	while (playerName.isEmpty()) {
+	    playerName = JOptionPane.showInputDialog("Enter your name: ");
+	}
+
+	highscoreList.addHighscore(new Highscore(playerName, board.getScore()));
+	this.remove(gameComponent);
+	this.add(scoreboardComponent, BorderLayout.CENTER);
+	this.pack();
+	this.setVisible(true);
+	this.repaint();
+
+    }
+
+    private void listenForNewGame() {
+	this.addKeyListener(new KeyListener() {
+	    @Override public void keyTyped(final java.awt.event.KeyEvent e) {
+
+	    }
+
+	    @Override public void keyPressed(final java.awt.event.KeyEvent e) {
+		board = null;
+	    }
+
+
+	    @Override public void keyReleased(final java.awt.event.KeyEvent e) {
+
+	    }
+	});
     }
 
     private class LeftKeyAction extends AbstractAction {

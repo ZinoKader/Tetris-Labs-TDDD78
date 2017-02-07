@@ -1,14 +1,16 @@
 package lab5;
 
 
+import javax.swing.*;
+
 public final class BoardTest {
 
-    private static final int BOARD_WIDTH = 20;
-    private static final int BOARD_HEIGHT = 26;
+    private static final int BOARD_WIDTH = 10;
+    private static final int BOARD_HEIGHT = 22;
 
     public static void main(String[] args) {
 	Board testBoard = new Board(BOARD_WIDTH, BOARD_HEIGHT);
-	new TetrisFrame(testBoard);
+	JFrame gameFrame = new TetrisFrame(testBoard);
     }
 
 }

@@ -141,6 +141,8 @@ public class Board {
 
     private void addScore() {
 	switch(removedRows) {
+	    case 0:
+	        break;
 	    case 1:
 	        score += ROW_SCORE_1;
 	        break;
@@ -153,6 +155,9 @@ public class Board {
 	    case 4:
 		score += ROW_SCORE_4;
 		break;
+	    default:
+	        score += ROW_SCORE_4;
+	        break;
 	}
     }
 

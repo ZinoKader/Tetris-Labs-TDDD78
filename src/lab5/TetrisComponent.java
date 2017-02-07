@@ -25,7 +25,6 @@ public class TetrisComponent extends JComponent implements BoardListener {
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
 
-
 	for(int row = 0; row < gameBoard.getHeight(); row++) {
 	    for(int col = 0; col < gameBoard.getWidth(); col++) {
 
