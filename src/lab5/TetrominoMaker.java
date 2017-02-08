@@ -77,8 +77,8 @@ public class TetrominoMaker {
 
     private SquareType[][] createJ() {
         return new SquareType[][] {
-		new SquareType[] {SquareType.L, SquareType.EMPTY, SquareType.EMPTY},
-		new SquareType[] {SquareType.L, SquareType.L, SquareType.L},
+		new SquareType[] {SquareType.J, SquareType.EMPTY, SquareType.EMPTY},
+		new SquareType[] {SquareType.J, SquareType.J, SquareType.J},
 		new SquareType[] {SquareType.EMPTY, SquareType.EMPTY, SquareType.EMPTY}
 	};
     }

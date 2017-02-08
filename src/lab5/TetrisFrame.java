@@ -25,7 +25,7 @@ public class TetrisFrame extends JFrame {
     private Board board;
     private HighscoreList highscoreList = HighscoreList.getInstance();
 
-    private static final int TICK_RATE = 140;
+    private static final int TICK_RATE = 180;
     private static final int COLOR_I = 0x07FFFF;
     private static final int COLOR_J = 0x1100FF;
     private static final int COLOR_L = 0xFFA500;
