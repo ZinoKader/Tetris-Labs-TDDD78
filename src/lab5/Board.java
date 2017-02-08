@@ -8,11 +8,12 @@ import java.util.Random;
 public class Board {
 
     private List<BoardListener> boardListeners;
-    private int width;
-    private int height;
     private SquareType[][] squares;
     private Random rnd;
     private TetrominoMaker tetrominoMaker;
+
+    private int width;
+    private int height;
     private Poly falling;
     private int fallingX;
     private int fallingY;
@@ -232,6 +233,9 @@ public class Board {
     }
 
     public boolean hasCollision() {
+        if(falling == null) {
+            return false;
+	}
 	for(int row = 0; row < falling.getHeight(); row++) {
 	    for(int col = 0; col < falling.getWidth(); col++) {
 		if(falling.getPoly()[row][col] != SquareType.EMPTY && getSquare(fallingX + col, fallingY + row) != SquareType.EMPTY) {
