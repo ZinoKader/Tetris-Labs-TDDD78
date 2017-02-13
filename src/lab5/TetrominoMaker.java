@@ -28,9 +28,9 @@ public class TetrominoMaker {
 	        return new Poly(createJ());
 	    case 6:
 	        return new Poly(createL());
+	    default:
+	        throw new IndexOutOfBoundsException("You can only get polys of index 0 to " + (getNumberOfTypes() - 1));
 	}
-
-	return null; //dumma Java tvingar mig göra det här om jag vill returnera i min switch utan ett default case
 
     }
 

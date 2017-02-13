@@ -100,7 +100,7 @@ public class Board {
 		}
 	    }
 	} else {
-	    moveDown();
+	    fallDown();
 	}
 
 	removeCompletedRows();
@@ -127,6 +127,15 @@ public class Board {
 
     public int getFallingY() {
 	return fallingY;
+    }
+
+    public void fallDown() {
+      	fallingY++;
+      	if(collisionHandler.hasCollision(this)) {
+      	    fallingY--;
+      	    addFalling();
+      	}
+      	notifyListeners();
     }
 
     public CollisionHandler getCollisionHandler() {
