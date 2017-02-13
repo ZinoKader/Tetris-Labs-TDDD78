@@ -9,6 +9,9 @@ public class TetrisComponent extends JComponent implements BoardListener {
 
     private static final int PANEL_SIZE = 200;
     private static final int SCORE_FONT_SIZE = 20;
+    private static final int SCORE_PADDING_TOP = 30;
+    private static final int COLLISION_HANDLER_FONT_SIZE = 15;
+    private static final int COLLISION_HANDLER_PADDING_TOP = 60;
     private static final int RECTANGLE_WIDTH = 30;
     private static final int RECTANGLE_HEIGHT = 30;
     private static final int BLOCK_OUTLINE_SIZE = 1;
@@ -53,8 +56,13 @@ public class TetrisComponent extends JComponent implements BoardListener {
 		g2d.setColor(Color.white);
 		g2d.setFont(new Font("Arial", Font.PLAIN, SCORE_FONT_SIZE));
 		g2d.drawString("Score: " + Integer.toString(gameBoard.getScore()),
-			       gameBoard.getWidth() * RECTANGLE_WIDTH + PANEL_SIZE / 3,  30);
+			       gameBoard.getWidth() * RECTANGLE_WIDTH + PANEL_SIZE / 3,  SCORE_PADDING_TOP);
 
+		//Paint collision handler text
+		g2d.setColor(Color.white);
+		g2d.setFont(new Font("Arial", Font.PLAIN, COLLISION_HANDLER_FONT_SIZE));
+		g2d.drawString(gameBoard.getCollisionHandler().getDescription(),
+			       gameBoard.getWidth() * RECTANGLE_WIDTH + PANEL_SIZE / 3,  COLLISION_HANDLER_PADDING_TOP);
 	    }
 	}
 

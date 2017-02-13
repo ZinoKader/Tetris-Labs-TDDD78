@@ -9,6 +9,7 @@ public class Board {
 
     private List<BoardListener> boardListeners;
     private SquareType[][] squares;
+    private CollisionHandler collisionHandler;
     private Random rnd;
     private TetrominoMaker tetrominoMaker;
 
@@ -18,7 +19,8 @@ public class Board {
     private int fallingX;
     private int fallingY;
 
-    private int removedRows;
+    private int totalSpawnedPolys;
+    private int thisTickRemovedRows;
     private int score;
     private boolean gameOver;
 
@@ -32,6 +34,7 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
+        this.collisionHandler = new DefaultCollisionHandler();
         this.falling = null;
         this.gameOver = false;
         this.score = 0;
@@ -62,30 +65,42 @@ public class Board {
 	this.falling = null;
  	this.gameOver = false;
 	this.score = 0;
- 	this.removedRows = 0;
+	this.totalSpawnedPolys = 0;
+ 	this.thisTickRemovedRows = 0;
  	createBoard();
     }
 
     public void tick() {
 
-        removedRows = 0;
+        this.thisTickRemovedRows = 0;
 
 	if(gameOver) {
 	    System.out.println("GAME OVER!");
 	    return;
 	}
 	else if(this.falling == null) {
+	    //powerup is decided based on amount of removed rows
+	    if(this.totalSpawnedPolys != 0 && this.totalSpawnedPolys % 10 == 0) {
+		this.collisionHandler = new Fallthrough();
+	    } else if(this.totalSpawnedPolys != 0 && this.totalSpawnedPolys % 5 == 0) {
+		this.collisionHandler = new DefaultCollisionHandler();
+	    } else {
+	        this.collisionHandler = new Fallthrough();
+	    }
+
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
+	    this.totalSpawnedPolys++;
+
 	    if(falling != null) { //Sometimes gets NPEs otherwise, no idea why ¯\_(ツ)_/¯
 		this.fallingX = (width / 2) - 1;
 		this.fallingY = 0; //Block should start falling from inside the frame
-		if (hasCollision()) {
+		if(collisionHandler.hasCollision(this)) {
 		    this.falling = null;
 		    this.gameOver = true;
 		}
 	    }
 	} else {
-	    fallDown();
+	    moveDown();
 	}
 
 	removeCompletedRows();
@@ -114,6 +129,10 @@ public class Board {
 	return fallingY;
     }
 
+    public CollisionHandler getCollisionHandler() {
+        return this.collisionHandler;
+    }
+
     private SquareType[] getRow(int row) {
         SquareType[] controlRow = new SquareType[width];
 	for(int col = 0; col < width; col++) {
@@ -128,7 +147,7 @@ public class Board {
 	        for(int col = 0; col < width; col++) {
 		    squares[row + OUTSIDE_FRAME_SIZE][col + OUTSIDE_FRAME_SIZE] = SquareType.EMPTY;
 		}
-		removedRows++;
+		this.thisTickRemovedRows++;
 		moveDownRemainingRows(row);
 	    }
 	}
@@ -145,7 +164,7 @@ public class Board {
     }
 
     private void addScore() {
-	switch(removedRows) {
+	switch(this.thisTickRemovedRows) {
 	    case 1:
 	        score += ROW_SCORE_1;
 	        break;
@@ -169,13 +188,8 @@ public class Board {
 	return squares[y + OUTSIDE_FRAME_SIZE][x + OUTSIDE_FRAME_SIZE];
     }
 
-    public void fallDown(){
-  	fallingY++;
-  	if(hasCollision()) {
-  	    fallingY--;
-  	    addFalling();
-  	}
-  	notifyListeners();
+    public void removeSquare(int x, int y) {
+        squares[y + OUTSIDE_FRAME_SIZE][x + OUTSIDE_FRAME_SIZE] = SquareType.EMPTY;
     }
 
     public void addFalling(){
@@ -191,18 +205,18 @@ public class Board {
 
     public void rotate(boolean b) {
         if(falling != null) {
-            Poly oldFalling;
+            Poly oldFalling = falling;
             if(b) {
-                oldFalling = falling;
                 falling = falling.rotateRight();
-                if(hasCollision()) {
+                if(collisionHandler.hasCollision(this)) {
                     falling = oldFalling;
 		}
 	    } else {
-		oldFalling = falling;
-		falling = falling.rotateLeft();
-		if(hasCollision()) {
-		    falling = oldFalling;
+		for(int i = 0; i < 3; i++) { //rotate right 3 times to rotate left
+		    falling = falling.rotateRight();
+		    if(collisionHandler.hasCollision(this)) {
+		        falling = oldFalling;
+		    }
 		}
 	    }
 	}
@@ -210,7 +224,7 @@ public class Board {
 
     public void moveLeft() {
 	fallingX--;
-	if(hasCollision()) {
+	if(collisionHandler.hasCollision(this)) {
 	    fallingX++;
 	}
 	notifyListeners();
@@ -218,7 +232,7 @@ public class Board {
 
     public void moveRight() {
 	fallingX++;
-	if(hasCollision()) {
+	if(collisionHandler.hasCollision(this)) {
 	    fallingX--;
 	}
 	notifyListeners();
@@ -226,24 +240,10 @@ public class Board {
 
     public void moveDown() {
         fallingY++;
-        if(hasCollision()) {
+        if(collisionHandler.hasCollision(this)) {
             fallingY--;
 	}
 	notifyListeners();
-    }
-
-    public boolean hasCollision() {
-        if(falling == null) {
-            return false;
-	}
-	for(int row = 0; row < falling.getHeight(); row++) {
-	    for(int col = 0; col < falling.getWidth(); col++) {
-		if(falling.getPoly()[row][col] != SquareType.EMPTY && getSquare(fallingX + col, fallingY + row) != SquareType.EMPTY) {
-		    return true;
-		}
-	    }
-	}
-	return false;
     }
 
     public boolean isGameOver() {

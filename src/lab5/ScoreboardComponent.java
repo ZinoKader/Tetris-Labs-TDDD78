@@ -31,7 +31,7 @@ public class ScoreboardComponent extends JComponent {
 	g2d.drawString("Highscores", CENTER_WIDTH_TEXT, SCORE_PADDING_TOP);
 
 
-	//Score tex
+	//Scoreboard players text
 	int newPadding = SCORE_PADDING_TOP * 2;
 	g2d.setFont(new Font("TimesRoman", Font.BOLD, FONT_SIZE_SCORES));
 	for(Highscore highScore : highscoreList.getHighscorelist()) {

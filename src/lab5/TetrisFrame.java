@@ -161,13 +161,19 @@ public class TetrisFrame extends JFrame {
 
     private class DownKeyAction extends AbstractAction {
 	@Override public void actionPerformed(final ActionEvent e) {
-	    board.moveDown();
+	    board.rotate(false);
 	}
     }
 
     private class UpKeyAction extends AbstractAction {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    board.rotate(true);
+	}
+    }
+
+    private class SpaceKeyAction extends AbstractAction {
+	@Override public void actionPerformed(final ActionEvent e) {
+	    board.moveDown();
 	}
     }
 
@@ -184,11 +190,13 @@ public class TetrisFrame extends JFrame {
 	in.put(KeyStroke.getKeyStroke("DOWN"), "down");
 	in.put(KeyStroke.getKeyStroke("LEFT"), "left");
 	in.put(KeyStroke.getKeyStroke("RIGHT"), "right");
+	in.put(KeyStroke.getKeyStroke("SPACE"), "space");
 	in.put(KeyStroke.getKeyStroke("ESCAPE"), "escape");
 	act.put("up", new UpKeyAction());
 	act.put("down", new DownKeyAction());
 	act.put("left", new LeftKeyAction());
 	act.put("right", new RightKeyAction());
+	act.put("space", new SpaceKeyAction());
 	act.put("escape", new EscapeKeyAction());
     }
 
