@@ -2,6 +2,8 @@ package lab5;
 
 public final class BoardToTextConverter {
 
+    private BoardToTextConverter() {}
+
     public static String convertToText(Board board) {
 
         StringBuilder boardSB = new StringBuilder();
