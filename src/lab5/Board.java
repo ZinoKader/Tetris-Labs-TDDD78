@@ -20,7 +20,7 @@ public class Board {
     private int fallingY;
 
     private int totalSpawnedPolys;
-    private int thisTickRemovedRows;
+    private int currentTickRemovedRows;
     private int score;
     private boolean gameOver;
 
@@ -66,13 +66,13 @@ public class Board {
  	this.gameOver = false;
 	this.score = 0;
 	this.totalSpawnedPolys = 0;
- 	this.thisTickRemovedRows = 0;
+ 	this.currentTickRemovedRows = 0;
  	createBoard();
     }
 
     public void tick() {
 
-        this.thisTickRemovedRows = 0;
+        this.currentTickRemovedRows = 0;
 
 	if(gameOver) {
 	    System.out.println("GAME OVER!");
@@ -81,11 +81,11 @@ public class Board {
 	else if(this.falling == null) {
 	    //powerup is decided based on amount of removed rows
 	    if(this.totalSpawnedPolys != 0 && this.totalSpawnedPolys % 10 == 0) {
-		this.collisionHandler = new Fallthrough();
+		this.collisionHandler = new Heavy();
 	    } else if(this.totalSpawnedPolys != 0 && this.totalSpawnedPolys % 5 == 0) {
-		this.collisionHandler = new DefaultCollisionHandler();
+		this.collisionHandler = new Fallthrough();
 	    } else {
-	        this.collisionHandler = new Fallthrough();
+	        this.collisionHandler = new DefaultCollisionHandler();
 	    }
 
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
@@ -156,7 +156,7 @@ public class Board {
 	        for(int col = 0; col < width; col++) {
 		    squares[row + OUTSIDE_FRAME_SIZE][col + OUTSIDE_FRAME_SIZE] = SquareType.EMPTY;
 		}
-		this.thisTickRemovedRows++;
+		this.currentTickRemovedRows++;
 		moveDownRemainingRows(row);
 	    }
 	}
@@ -172,8 +172,36 @@ public class Board {
 	notifyListeners();
     }
 
+    public boolean isRowCollapisble(int col, int collapseFrom) {
+	for(int y = collapseFrom; y < height; y++) {
+	    if(getSquare(col, y) == SquareType.EMPTY) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void collapseRow(int col, int collapseFrom) {
+
+	int firstEmptyPos = 0;
+
+	for(int row = collapseFrom; row < height; row++) {
+	    if(getSquare(col, row) == SquareType.EMPTY) {
+		firstEmptyPos = row;
+		break;
+	    }
+	}
+
+	for(int row = firstEmptyPos; collapseFrom - 1 < row; row--) {
+	    addSquare(col, row, getSquare(col, row - 1));
+	}
+
+	//Remove the square which we've collapsed down
+	addSquare(col, collapseFrom - 1, SquareType.EMPTY);
+    }
+
     private void addScore() {
-	switch(this.thisTickRemovedRows) {
+	switch(this.currentTickRemovedRows) {
 	    case 1:
 	        score += ROW_SCORE_1;
 	        break;
@@ -195,6 +223,10 @@ public class Board {
 
     public SquareType getSquare(int x, int y) {
 	return squares[y + OUTSIDE_FRAME_SIZE][x + OUTSIDE_FRAME_SIZE];
+    }
+
+    public void addSquare(int x, int y, SquareType squareType) {
+        squares[y + OUTSIDE_FRAME_SIZE][x + OUTSIDE_FRAME_SIZE] = squareType;
     }
 
     public void removeSquare(int x, int y) {

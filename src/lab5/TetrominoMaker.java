@@ -6,7 +6,7 @@ public class TetrominoMaker {
     }
 
     public int getNumberOfTypes() {
-	return SquareType.values().length - 1; //Vi räknar inte med EMPTY
+	return SquareType.values().length - 2; //Vi räknar inte med EMPTY och OUTSIDE
     }
 
     public Poly getPoly(int n) {
@@ -29,7 +29,7 @@ public class TetrominoMaker {
 	    case 6:
 	        return new Poly(createL());
 	    default:
-	        throw new IndexOutOfBoundsException("You can only get polys of index 0 to " + (getNumberOfTypes() - 1));
+	        throw new IndexOutOfBoundsException("You can only get polys of index 0 to " + getNumberOfTypes());
 	}
 
     }
