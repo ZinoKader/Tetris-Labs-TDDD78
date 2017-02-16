@@ -32,7 +32,7 @@ public class TetrisComponent extends JComponent implements BoardListener {
 	    for(int col = 0; col < gameBoard.getWidth(); col++) {
 
 	        //Handle painting of falling and board blocks
-		if(positionIsFalling(col, row)){
+		if(positionIsFalling(col, row)) {
 		    g2d.setColor(squareColors.get(gameBoard.getFalling().getPoly()[row - gameBoard.getFallingY()][col - gameBoard.getFallingX()]));
 		} else {
 		    g2d.setColor(squareColors.get(gameBoard.getSquare(col, row)));

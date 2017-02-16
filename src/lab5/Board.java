@@ -91,13 +91,11 @@ public class Board {
 	    this.falling = tetrominoMaker.getPoly(rnd.nextInt(tetrominoMaker.getNumberOfTypes()));
 	    this.totalSpawnedPolys++;
 
-	    if(falling != null) { //Sometimes gets NPEs otherwise, no idea why ¯\_(ツ)_/¯
-		this.fallingX = (width / 2) - 1;
-		this.fallingY = 0; //Block should start falling from inside the frame
-		if(collisionHandler.hasCollision(this)) {
-		    this.falling = null;
-		    this.gameOver = true;
-		}
+	    this.fallingX = (width / 2) - 1;
+	    this.fallingY = 0; //Block should start falling from inside the frame
+	    if(collisionHandler.hasCollision(this)) {
+		this.falling = null;
+		this.gameOver = true;
 	    }
 	} else {
 	    fallDown();
