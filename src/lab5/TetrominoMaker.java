@@ -6,7 +6,7 @@ public class TetrominoMaker {
     }
 
     public int getNumberOfTypes() {
-	return SquareType.values().length - 2; //Vi räknar inte med EMPTY och OUTSIDE
+	return SquareType.values().length - 2; //EMPTY and OUTSIDE not counted
     }
 
     public Poly getPoly(int n) {
